@@ -54,12 +54,28 @@
             text-align: center;
             transition: all 0.2s ease;
             cursor: pointer;
+            position: relative;
         }
         .btn-choice.selected {
             border-color: #3b82f6;
             background-color: #eff6ff;
             color: #1d4ed8;
             box-shadow: 0 0 0 2px #3b82f6;
+        }
+        .recommend-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #ef4444;
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 9999px;
+            font-weight: bold;
+            display: none; /* Hidden by default */
+        }
+        .btn-choice.recommended .recommend-badge {
+            display: inline-block;
         }
          .flow-card {
             background-color: white;
@@ -82,15 +98,15 @@
         }
         /* Modal styles */
         .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 50; /* Sit on top */
+            display: none;
+            position: fixed;
+            z-index: 50;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
         }
         .modal-content {
             background-color: #fefefe;
@@ -123,6 +139,14 @@
             opacity: 1;
             transform: translateY(0);
         }
+        .btn-recommended {
+            background-color: #22c55e;
+            color: white;
+            border-color: #16a34a;
+        }
+        .btn-recommended:hover {
+            background-color: #16a34a;
+        }
     </style>
 </head>
 <body class="antialiased text-slate-700">
@@ -141,13 +165,18 @@
                     <div>
                         <label for="sales-scale" class="block text-sm font-medium text-slate-600">売上規模</label>
                         <select id="sales-scale" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                            <option>1億円未満</option><option>1億～10億円</option><option>10億～50億円</option><option>50億円以上</option>
+                            <option value="10">10億円以下</option>
+                            <option value="100">10億～100億円</option>
+                            <option value="500">100億～500億円</option>
+                            <option value="501">500億円以上</option>
                         </select>
                     </div>
                     <div>
                         <label for="industry" class="block text-sm font-medium text-slate-600">業種</label>
                         <select id="industry" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                            <option>BtoB</option><option>BtoC</option>
+                            <option>BtoB</option>
+                            <option>BtoC</option>
+                            <option>ベンチャー企業</option>
                         </select>
                     </div>
                     <div>
@@ -171,18 +200,22 @@
 
         <!-- Screen 2: Product Selection -->
         <div id="screen-2" class="screen">
-            <div class="bg-white p-6 rounded-lg shadow-md border border-slate-200">
+             <div class="bg-white p-6 rounded-lg shadow-md border border-slate-200">
                 <h2 class="text-xl font-semibold mb-4 border-b pb-3 flex items-center"><i class="fas fa-box-open mr-3 text-blue-800"></i>STEP 2: フック商材を選択</h2>
+                <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-700 p-4 rounded-md mb-4" role="alert">
+                    <p class="font-bold">レコメンド機能</p>
+                    <p>企業情報と日付に基づき、推奨される商材に <i class="fas fa-star text-red-500"></i> 推奨バッジが表示されます。</p>
+                </div>
                 <div id="product-selection-grid" class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
-                    <button class="btn-choice">四季報</button>
-                    <button class="btn-choice">賢者本編</button>
-                    <button class="btn-choice">ラボ</button>
-                    <button class="btn-choice">アチーブメント</button>
-                    <button class="btn-choice">新幹線</button>
-                    <button class="btn-choice">球場看板</button>
-                    <button class="btn-choice">屋外看板</button>
-                    <button class="btn-choice">〇〇</button>
-                    <button class="btn-choice">△△</button>
+                    <button class="btn-choice" data-product-name="四季報"><span class="recommend-badge"><i class="fas fa-star"></i> 推奨</span>四季報</button>
+                    <button class="btn-choice" data-product-name="賢者本編"><span class="recommend-badge"><i class="fas fa-star"></i> 推奨</span>賢者本編</button>
+                    <button class="btn-choice" data-product-name="ラボ"><span class="recommend-badge"><i class="fas fa-star"></i> 推奨</span>ラボ</button>
+                    <button class="btn-choice" data-product-name="アチーブメント"><span class="recommend-badge"><i class="fas fa-star"></i> 推奨</span>アチーブメント</button>
+                    <button class="btn-choice" data-product-name="新幹線"><span class="recommend-badge"><i class="fas fa-star"></i> 推奨</span>新幹線</button>
+                    <button class="btn-choice" data-product-name="球場看板"><span class="recommend-badge"><i class="fas fa-star"></i> 推奨</span>球場看板</button>
+                    <button class="btn-choice" data-product-name="屋外看板"><span class="recommend-badge"><i class="fas fa-star"></i> 推奨</span>屋外看板</button>
+                    <button class="btn-choice" data-product-name="〇〇"><span class="recommend-badge"><i class="fas fa-star"></i> 推奨</span>〇〇</button>
+                    <button class="btn-choice" data-product-name="△△"><span class="recommend-badge"><i class="fas fa-star"></i> 推奨</span>△△</button>
                 </div>
                  <div class="mt-6 flex justify-between">
                     <button id="back-to-step1-btn" class="btn-secondary py-2 px-6 rounded-md font-semibold transition"><i class="fas fa-arrow-left mr-2"></i>戻る</button>
@@ -224,12 +257,11 @@
         <div class="modal-content">
             <span class="close-button">&times;</span>
             <h3 id="modal-title" class="text-2xl font-bold mb-4">資料</h3>
-            <div id="modal-body" class="text-slate-600 bg-slate-50 p-4 rounded-md border">
+            <div id="modal-body" class="text-slate-600 bg-slate-50 p-4 rounded-md border" style="white-space: pre-wrap;">
                 ここに具体的な資料（メール文面、トークスクリプト等）の内容が表示されます。
             </div>
         </div>
     </div>
-
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -248,8 +280,40 @@
             const closeButton = document.querySelector('.close-button');
 
             let appState = {
+                companyInfo: {},
                 selectedProduct: null,
                 selectedFlow: null
+            };
+            
+            const assetContent = {
+                infoMailTemplate: `突然のご連絡失礼致します。
+株式会社矢動丸プロジェクトの〇〇と申します。
+
+弊社は、テレビ番組などを運営する広告会社です。
+
+今回、コロナウイルス感染症拡大に伴い、世界中がコロナウイルスと戦う今こそ、
+成功している企業の秘訣、強い企業の信念やこれからの戦略をご紹介することで、
+明日の元気と活力を醸成する一助になればと考え、
+2004年（第1回ゲスト楽天 三木谷様）からスタートし、
+これまで16年続いておりますテレビ番組「賢者の選択」にて、
+元気なエクセレントカンパニーの声を紹介しようと、新たな企画を実施することになり、
+先日の日経ビジネスオンラインにて、能作代表の記事をきっかけに、
+ぜひ貴社にご案内できないかと思い、ご連絡させていただきました。
+
+本企画は、テレビ放送に先行して、取材後すぐに番組MC陣との対談映像を
+配信することが可能であり、プロモーション活動にも貢献できる企画であると考えております。
+※企画概要として、【WEB配信】と【テレビ放送】を通してご紹介致します。
+※WEB配信はBS12スタジオで収録後、1週間以内に即配信（2020年6月下旬～）
+※テレビ放送は貴社の都合の良い時期に放送（2020年10月～想定）
+番組MC陣も、蟹瀬誠一や宮川俊二、唐橋ユミに加えて、寺島実郎、夏野剛、
+厚切りジェイソンなどの新キャスト陣を加えております。
+※MCによっては、スケジュールや条件（NG業種）もございますので、何卒ご了承ください。
+
+ご興味いただけるようでしたら、まずは企画の概要説明の場として1時間ほど頂戴し、
+「ZOOM」によるWEB面談をお願いできればと考えております。
+
+お忙しいところ恐縮ですが、候補日時を2，3日ご教示いただけますと幸いです。
+ご検討の程宜しくお願い致します。`
             };
 
             const baseFlowLogic = {
@@ -273,27 +337,70 @@
                 sendMaterialOnly: { text: '資料を送付しました。(<span class="asset-link" data-asset="materialTemplate">文面リンク</span>) <br>再度追いかけ電話をします。(<span class="asset-link" data-asset="followUpScriptAfterMaterial">追い電スクリプト</span>)', isEnd: true },
                 appointment: {
                     text: 'アポ取得成功！面談を実施します。<br>面談で活用できる<span class="asset-link" data-asset="meeting_script">面談スクリプト</span>と<span class="asset-link" data-asset="meeting_presentation">面談時提示資料</span>はこちらです。<br><br>面談の結果、顧客の主なニーズは何でしたか？',
-                    options: [ { text: 'IR', next: 'needs_ir' }, { text: '採用', next: 'needs_hr' }, { text: 'ブランディング/認知', next: 'needs_branding' }, { text: 'その他（インナー/販促）', next: 'needs_other' } ]
+                    options: [ { text: 'IR', next: 'counterpartCheck' }, { text: '採用', next: 'counterpartCheck' }, { text: 'ブランディング/認知', next: 'counterpartCheck' }, { text: 'その他（インナー/販促）', next: 'counterpartCheck' } ]
                 },
-                needs_ir: {
-                    text: 'IRニーズのお客様です。<br>「トスアップ」または「イベント招待」で次のステップに進みましょう。',
-                    options: [ { text: 'トスアップする', next: 'tossup' }, { text: 'イベントに招待する', next: 'event' } ],
-                    assets: [{ name: '企画書(IR)', type: 'proposal_ir' }, { name: '事例資料(IR)', type: 'caseStudy_ir' }]
+                counterpartCheck: {
+                    isDynamic: true,
+                    render: (container) => {
+                        container.innerHTML = `
+                            <div class="text-lg mb-4">素晴らしい！次のステップのため、商談相手の役職を選択してください。</div>
+                            <select id="counterpart-title" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="担当者">担当者</option>
+                                <option value="課長">課長</option>
+                                <option value="部長">部長</option>
+                                <option value="役員">役員</option>
+                                <option value="社長">社長</option>
+                            </select>
+                            <div class="flex justify-end mt-4">
+                                <button id="confirm-counterpart" class="btn-primary py-2 px-4 rounded-md">決定</button>
+                            </div>
+                        `;
+                        const confirmButton = container.querySelector('#confirm-counterpart');
+                        if (confirmButton) {
+                            confirmButton.onclick = () => {
+                                const title = container.querySelector('#counterpart-title').value;
+                                container.innerHTML = ''; // Clear the card content
+                                renderStep('recommendNextAction', { counterpartTitle: title }, container); // Render next step inside the same card
+                            };
+                        }
+                    }
                 },
-                needs_hr: {
-                    text: '採用ニーズのお客様です。<br>「トスアップ」または「イベント招待」で次のステップに進みましょう。',
-                    options: [ { text: 'トスアップする', next: 'tossup' }, { text: 'イベントに招待する', next: 'event' } ],
-                    assets: [{ name: '企画書(採用)', type: 'proposal_hr' }, { name: '事例資料(採用)', type: 'caseStudy_hr' }]
-                },
-                needs_branding: {
-                    text: 'ブランディング/認知ニーズのお客様です。<br>「トスアップ」または「イベント招待」で次のステップに進みましょう。',
-                    options: [ { text: 'トスアップする', next: 'tossup' }, { text: 'イベントに招待する', next: 'event' } ],
-                    assets: [{ name: '企画書(ブランディング)', type: 'proposal_branding' }, { name: '事例資料(ブランディング)', type: 'caseStudy_branding' }]
-                },
-                needs_other: {
-                    text: 'インナー/販促ニーズのお客様です。<br>「トスアップ」または「イベント招待」で次のステップに進みましょう。',
-                    options: [ { text: 'トスアップする', next: 'tossup' }, { text: 'イベントに招待する', next: 'event' } ],
-                    assets: [{ name: '企画書(その他)', type: 'proposal_other' }, { name: '事例資料(その他)', type: 'caseStudy_other' }]
+                recommendNextAction: {
+                    isDynamic: true,
+                    render: (container, data) => {
+                        const title = data.counterpartTitle;
+                        let recommendationText = '';
+                        let tossupRecommended = false;
+                        let communityRecommended = false;
+
+                        if (['役員', '社長'].includes(title)) {
+                            recommendationText = `<p class="font-bold text-green-700">商談相手が「${title}」のため、<span class="underline">トスアップ</span>を強く推奨します。</p>`;
+                            tossupRecommended = true;
+                        } else {
+                            recommendationText = `<p class="font-bold text-green-700">商談相手が「${title}」のため、まずは<span class="underline">コミュニティイン</span>で関係を深めることを推奨します。</p>`;
+                            communityRecommended = true;
+                        }
+                        
+                        container.innerHTML = `
+                            <div class="text-lg mb-4">${recommendationText}</div>
+                            <div class="flex flex-wrap gap-4 mt-4">
+                                <button data-next="tossup" class="py-2 px-4 rounded-md font-semibold transition ${tossupRecommended ? 'btn-recommended' : 'btn-secondary'}">トスアップする</button>
+                                <button data-next="event" class="py-2 px-4 rounded-md font-semibold transition ${communityRecommended ? 'btn-recommended' : 'btn-secondary'}">イベントに招待する (コミュニティイン)</button>
+                            </div>
+                        `;
+                        container.querySelectorAll('button').forEach(button => {
+                            button.addEventListener('click', (e) => {
+                                const parentCard = e.target.closest('.step-card-flow');
+                                parentCard.querySelectorAll('button').forEach(btn => {
+                                    btn.disabled = true;
+                                    btn.classList.add('opacity-50', 'cursor-not-allowed');
+                                });
+                                e.target.classList.remove('btn-secondary', 'btn-recommended');
+                                e.target.classList.add('btn-primary');
+                                renderStep(e.target.dataset.next);
+                            });
+                        });
+                    }
                 },
                 tossup: { text: '役員へトスアップし、トップ営業でクロージングします。RC化、LTV最大化を目指しましょう。', isEnd: true },
                 event: { text: 'イベントに招待し、役員との接点を創出します。イベント後、お礼訪問からトスアップに繋げましょう。', isEnd: true }
@@ -318,66 +425,120 @@
                 navigateTo('4');
             };
 
-            const renderStep = (stepKey) => {
+            const renderStep = (stepKey, data = {}, container = null) => {
                 const stepData = baseFlowLogic[stepKey];
                 if (!stepData) return;
 
-                const stepElement = document.createElement('div');
-                stepElement.className = 'step-card-flow bg-white p-6 rounded-lg shadow-md border border-slate-200 mb-6';
-                
-                let stepText = (typeof stepData.text === 'function') ? stepData.text(appState.selectedProduct) : stepData.text;
-
-                let contentHTML = `<div class="text-lg mb-4">${stepText}</div>`;
-                if (stepData.assets) {
-                    contentHTML += `<div class="text-sm mt-4 border-t pt-3"><strong>関連資料:</strong><ul class="list-disc list-inside mt-2">`;
-                    stepData.assets.forEach(asset => {
-                        contentHTML += `<li><span class="asset-link" data-asset="${asset.type}">${asset.name}</span></li>`;
-                    });
-                    contentHTML += `</ul></div>`;
+                const stepElement = container || document.createElement('div');
+                if (!container) {
+                    stepElement.className = 'step-card-flow bg-white p-6 rounded-lg shadow-md border border-slate-200 mb-6';
                 }
-                stepElement.innerHTML = contentHTML;
 
-                if (!stepData.isEnd && stepData.options) {
-                    const optionsContainer = document.createElement('div');
-                    optionsContainer.className = 'flex flex-wrap gap-4 mt-4';
-                    stepData.options.forEach(option => {
-                        const button = document.createElement('button');
-                        button.className = 'py-2 px-4 rounded-md font-semibold transition btn-secondary';
-                        button.textContent = option.text;
-                        button.dataset.next = option.next;
-                        button.addEventListener('click', (e) => {
-                             const parentCard = e.target.closest('.step-card-flow');
-                            parentCard.querySelectorAll('button').forEach(btn => {
-                                btn.disabled = true;
-                                btn.classList.add('opacity-50', 'cursor-not-allowed');
-                            });
-                            e.target.classList.remove('btn-secondary');
-                            e.target.classList.add('btn-primary');
-                            renderStep(e.target.dataset.next);
+                if (stepData.isDynamic) {
+                    stepData.render(stepElement, data);
+                } else {
+                    let stepText = (typeof stepData.text === 'function') ? stepData.text(appState.selectedProduct) : stepData.text;
+                    let contentHTML = `<div class="text-lg mb-4">${stepText}</div>`;
+                    
+                    if (stepData.assets) {
+                        contentHTML += `<div class="text-sm mt-4 border-t pt-3"><strong>関連資料:</strong><ul class="list-disc list-inside mt-2">`;
+                        stepData.assets.forEach(asset => {
+                            contentHTML += `<li><span class="asset-link" data-asset="${asset.type}">${asset.name}</span></li>`;
                         });
-                        optionsContainer.appendChild(button);
-                    });
-                    stepElement.appendChild(optionsContainer);
+                        contentHTML += `</ul></div>`;
+                    }
+                    stepElement.innerHTML = contentHTML;
+
+                    if (!stepData.isEnd && stepData.options) {
+                        const optionsContainer = document.createElement('div');
+                        optionsContainer.className = 'flex flex-wrap gap-4 mt-4';
+                        stepData.options.forEach(option => {
+                            const button = document.createElement('button');
+                            button.className = 'py-2 px-4 rounded-md font-semibold transition btn-secondary';
+                            button.textContent = option.text;
+                            button.dataset.next = option.next;
+                            button.addEventListener('click', (e) => {
+                                const parentCard = e.target.closest('.step-card-flow');
+                                parentCard.querySelectorAll('button').forEach(btn => {
+                                    btn.disabled = true;
+                                    btn.classList.add('opacity-50', 'cursor-not-allowed');
+                                });
+                                e.target.classList.remove('btn-secondary');
+                                e.target.classList.add('btn-primary');
+                                renderStep(e.target.dataset.next);
+                            });
+                            optionsContainer.appendChild(button);
+                        });
+                        stepElement.appendChild(optionsContainer);
+                    }
                 }
                 
-                flowStepsContainer.appendChild(stepElement);
-                setTimeout(() => stepElement.classList.add('active'), 10);
+                if (!container) {
+                    flowStepsContainer.appendChild(stepElement);
+                    setTimeout(() => stepElement.classList.add('active'), 10);
+                }
+            };
+            
+            const updateRecommendations = () => {
+                const sales = parseInt(document.getElementById('sales-scale').value, 10);
+                const industry = document.getElementById('industry').value;
+                const currentMonth = new Date().getMonth() + 1; // 1-12
+
+                const scores = {};
+                const productButtons = document.querySelectorAll('#product-selection-grid .btn-choice');
+                productButtons.forEach(button => {
+                    const productName = button.dataset.productName;
+                    scores[productName] = 0;
+                    if (productName === '四季報' && [3, 6, 9, 12].includes(currentMonth)) scores[productName]+=2;
+                    if (productName === '賢者本編' && sales >= 100) scores[productName]++;
+                    if ((productName === 'ラボ' || productName === 'アチーブメント') && industry === 'ベンチャー企業') scores[productName]+=2;
+                    if (productName === '新幹線' && sales >= 100) scores[productName]++;
+                    if (productName === '球場看板' && currentMonth >= 2 && currentMonth <= 8) scores[productName]++;
+                });
+
+                let topProduct = '';
+                let maxScore = -1;
+                for (const product in scores) {
+                    if (scores[product] > maxScore) {
+                        maxScore = scores[product];
+                        topProduct = product;
+                    }
+                }
+
+                productButtons.forEach(button => {
+                    button.classList.remove('recommended');
+                    if (button.dataset.productName === topProduct && maxScore > 0) {
+                        button.classList.add('recommended');
+                    }
+                });
             };
 
             const openModal = (assetType) => {
-                modalTitle.textContent = `資料: ${assetType}`;
-                modalBody.innerHTML = `<p>これは「<strong>${assetType}</strong>」のプレースホルダーです。</p><p class="mt-4">実際のアプリケーションでは、ここに具体的なメール文面、トークスクリプト、企画書のテンプレート、または事例資料へのリンクなどが表示されます。</p>`;
+                const title = `資料: ${assetType}`;
+                let content = assetContent[assetType] || `<p>これは「<strong>${assetType}</strong>」のプレースホルダーです。</p><p class="mt-4">実際のアプリケーションでは、ここに具体的なメール文面、トークスクリプト、企画書のテンプレート、または事例資料へのリンクなどが表示されます。</p>`;
+                
+                modalTitle.textContent = title;
+                modalBody.textContent = content; // Use textContent to preserve formatting like newlines
                 modal.style.display = 'block';
             };
 
             // Event Listeners Setup
-            document.getElementById('goto-step2-btn').addEventListener('click', () => navigateTo('2'));
+            document.getElementById('goto-step2-btn').addEventListener('click', () => {
+                appState.companyInfo.sales = document.getElementById('sales-scale').value;
+                appState.companyInfo.industry = document.getElementById('industry').value;
+                updateRecommendations();
+                navigateTo('2');
+            });
             document.getElementById('back-to-step1-btn').addEventListener('click', () => navigateTo('1'));
             document.getElementById('goto-step3-btn').addEventListener('click', () => navigateTo('3'));
             document.getElementById('back-to-step2-btn').addEventListener('click', () => navigateTo('2'));
             document.getElementById('reset-button').addEventListener('click', () => {
                 appState.selectedProduct = null;
                 appState.selectedFlow = null;
+                appState.companyInfo = {};
+                 document.querySelectorAll('#product-selection-grid .btn-choice').forEach(b => b.classList.remove('selected', 'recommended'));
+                 document.getElementById('goto-step3-btn').disabled = true;
+                 document.getElementById('goto-step3-btn').classList.add('opacity-50', 'cursor-not-allowed');
                 navigateTo('1');
             });
             
@@ -387,7 +548,7 @@
                 button.addEventListener('click', () => {
                     productButtons.forEach(btn => btn.classList.remove('selected'));
                     button.classList.add('selected');
-                    appState.selectedProduct = button.textContent;
+                    appState.selectedProduct = button.dataset.productName;
                     gotoStep3Btn.disabled = false;
                     gotoStep3Btn.classList.remove('opacity-50', 'cursor-not-allowed');
                 });
